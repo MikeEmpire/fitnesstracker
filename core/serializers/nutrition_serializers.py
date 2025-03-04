@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from models.nutrition_models import NutritionPlan, Meal
+from core.models.nutrition_models import NutritionPlan, Meal
 
 
 class NutritionPlanSerializer(serializers.ModelSerializer):
