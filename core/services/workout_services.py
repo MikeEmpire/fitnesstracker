@@ -1,5 +1,6 @@
 import os
 from core.models.workout_models import WorkoutPlan
+from core.types import WorkoutPreferences
 from openai import OpenAI
 
 
@@ -9,9 +10,17 @@ def create_default_workout(user):
     )
 
 
-def generate_workout_plan(user):
+def generate_workout_plan(preferences: WorkoutPreferences) -> dict:
+    """
+    Generates a workout plan using OpenAI's GPT-4 based on user preferences.
+
+    Args:
+        preferences (WorkoutPreferences): A dictionary containing user preferences.
+
+    Returns:
+        dict: The response from OpenAI containing the generated workout plan.
+    """
     client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-    preferences = user.preferences
 
     prompt = f"""
     Create a {preferences.fitness_goal} workout plan for a {preferences.experience_level} level individual.
@@ -32,3 +41,4 @@ def generate_workout_plan(user):
     )
 
     print(response)
+    return response

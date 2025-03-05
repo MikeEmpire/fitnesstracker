@@ -22,5 +22,5 @@ DJANGO_API_VERSION = 1
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path(f"api/v{DJANGO_API_VERSION}", include("core.urls")),
+    path(f"api/v{DJANGO_API_VERSION}/", include("core.urls")),
 ]

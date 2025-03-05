@@ -1,7 +1,12 @@
 from django.urls import path
-from core.views.workout_views import WorkoutPlanView
+from core.views.workout_views import GenerateWorkoutPlanView, WorkoutPlanView
 
 
 urlpatterns = [
-    path("workout/", WorkoutPlanView.as_view(), name="workouts"),
+    path("", WorkoutPlanView.as_view(), name="workouts"),
+    path(
+        "generate-workout/",
+        GenerateWorkoutPlanView.as_view(),
+        name="Generate Workout Plans",
+    ),
 ]
