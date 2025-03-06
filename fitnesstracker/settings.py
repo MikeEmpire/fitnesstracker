@@ -31,6 +31,9 @@ SECRET_KEY = env("SECRET_KEY")
 
 OPENAI_API_KEY = env("OPENAI_API_KEY")
 
+SOCIAL_AUTH_GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID")
+SOCIAL_AUTH_GOOGLE_SECRET = env("GOOGLE_CLIENT_SECRET")
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -40,18 +43,29 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 # Application definition
 
 INSTALLED_APPS = [
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+    "dj_rest_auth",
+    "dj_rest_auth.registration",
+    "django_extensions",
     "fitnesstracker",
-    "rest_framework",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
     "core",
+    "rest_framework",
+    "rest_framework.authtoken",
 ]
 
+
 MIDDLEWARE = [
+    "allauth.account.middleware.AccountMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -147,4 +161,24 @@ REST_FRAMEWORK = {
     "DEFAULT_PARSER_CLASSES": [
         "rest_framework.parsers.JSONParser",
     ],
+}
+
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+SITE_ID = 2
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_LOGIN_METHODS = {"email"}
+ACCOUNT_EMAIL_REQUIRED = True
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "SCOPE": ["profile", "email"],
+        "APP": {
+            "CLIENT_ID": env("GOOGLE_CLIENT_ID"),
+            "SECRET": env("GOOGLE_CLIENT_SECRET"),
+        },
+        "AUTH_PARAMS": {"access_type": "online"},
+    },
 }
