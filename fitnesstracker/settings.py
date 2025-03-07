@@ -29,8 +29,10 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY")
 
+# Set open ai api key
 OPENAI_API_KEY = env("OPENAI_API_KEY")
 
+# Used for Oauth2 google authentication
 SOCIAL_AUTH_GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID")
 SOCIAL_AUTH_GOOGLE_SECRET = env("GOOGLE_CLIENT_SECRET")
 
@@ -47,8 +49,6 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
-    "dj_rest_auth",
-    "dj_rest_auth.registration",
     "django_extensions",
     "fitnesstracker",
     "django.contrib.admin",
@@ -163,22 +163,29 @@ REST_FRAMEWORK = {
     ],
 }
 
-AUTHENTICATION_BACKENDS = (
-    "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
-)
+LOGIN_REDIRECT_URL = "/"
+ACCOUNT_LOGOUT_REDIRECT_URL = "/"
+ACCOUNT_ADAPTER = "allauth.account.adapter.DefaultAccountAdapter"
+SOCIALACCOUNT_ADAPTER = "allauth.socialaccount.adapter.DefaultSocialAccountAdapter"
 
-SITE_ID = 2
+
+SITE_ID = 1
+
 ACCOUNT_EMAIL_VERIFICATION = "none"
-ACCOUNT_LOGIN_METHODS = {"email"}
-ACCOUNT_EMAIL_REQUIRED = True
+
+AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)
+
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
-        "SCOPE": ["profile", "email"],
+        "SCOPE": [
+            "profile",
+            "email",
+        ],
         "APP": {
-            "CLIENT_ID": env("GOOGLE_CLIENT_ID"),
-            "SECRET": env("GOOGLE_CLIENT_SECRET"),
+            "client_id": SOCIAL_AUTH_GOOGLE_CLIENT_ID,
+            "secret": SOCIAL_AUTH_GOOGLE_SECRET,
+            "key": "google",
         },
         "AUTH_PARAMS": {"access_type": "online"},
-    },
+    }
 }
