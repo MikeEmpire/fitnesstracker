@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "core",
     "rest_framework",
     "rest_framework.authtoken",
+    "oauth2_provider",  # OAuth2 Toolkit
 ]
 
 
@@ -161,12 +162,27 @@ REST_FRAMEWORK = {
     "DEFAULT_PARSER_CLASSES": [
         "rest_framework.parsers.JSONParser",
     ],
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "oauth2_provider.contrib.rest_framework.OAuth2Authentication",  # OAuth2 Tokens
+        "rest_framework.authentication.SessionAuthentication",  # Optional for web login
+        "rest_framework.authentication.TokenAuthentication",
+    ),
 }
 
 LOGIN_REDIRECT_URL = "/"
-ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 ACCOUNT_ADAPTER = "allauth.account.adapter.DefaultAccountAdapter"
+ACCOUNT_LOGOUT_REDIRECT_URL = "/"
+ACCOUNT_SIGNUP_REDIRECT_URL = "/"
 SOCIALACCOUNT_ADAPTER = "allauth.socialaccount.adapter.DefaultSocialAccountAdapter"
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
+# Allow OAuth2 tokens
+OAUTH2_PROVIDER = {
+    "ACCESS_TOKEN_EXPIRE_SECONDS": 3600,  # 1 hour token validity
+    "REFRESH_TOKEN_EXPIRE_SECONDS": 86400,  # Refresh token valid for 1 day
+    "SCOPES": {"read": "Read access", "write": "Write access"},
+}
 
 
 SITE_ID = 1
