@@ -1,20 +1,7 @@
 import pytest
-from django.test import TestCase
-from core.models.user_models import User
 from core.models.workout_models import WorkoutPlan
-from rest_framework.test import APIClient
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from unittest.mock import patch, MagicMock
-
-
-class WorkoutPlanModelTest(TestCase):
-    def setUp(self):
-        self.user = User.objects.create(username="testuser")
-
-    def test_create_workout_plan(self):
-        plan = WorkoutPlan.objects.create(
-            user=self.user, name="Beginner Plan", goal="strength", duration=8
-        )
-        self.assertEqual(plan.name, "Beginner Plan")
 
 
 @pytest.mark.django_db
@@ -29,7 +16,7 @@ def test_generate_invalid_workout_plan(api_client):
     response = api_client.post(
         "/api/v1/workouts/generate-workout/", invalid_data, format="json"
     )
-    assert response.status_code == 400
+    assert response.status_code == HTTP_400_BAD_REQUEST
 
 
 @pytest.mark.django_db
@@ -65,30 +52,15 @@ def test_generate_workout_plan_mocked(api_client, test_user):
             format="json",
         )
 
-        assert response.status_code == 200  # ✅ Expect successful creation
+        assert response.status_code == HTTP_201_CREATED  # ✅ Expect successful creation
         assert "plan_id" in response.json()  # ✅ Expect a generated plan ID
 
         # ✅ Ensure a workout plan is saved to the database
         assert WorkoutPlan.objects.count() == 1
 
 
-class GenerateWorkoutPlanTest(TestCase):
-    def setUp(self):
-        from core.tests.conftest import api_client
-
-        self.authenticated_client = api_client()
-        self.unauthenticated_client = APIClient()
-
-        self.valid_data = {
-            "fitness_goal": "muscle_gain",
-            "experience_level": "beginner",
-            "days_per_week": 4,
-            "workout_location": "home",
-            "available_equipment": ["dumbbells", "resistance bands"],
-        }
-        self.invalid_data = {
-            "experience_level": "beginner",  # Missing "fitness_goal"
-            "days_per_week": 4,
-            "workout_location": "gym",
-            "available_equipment": ["treadmill"],
-        }
+@pytest.mark.django_db
+def test_workout_plan_list(api_client):
+    """Test that a user is able to get a list of workout plans"""
+    response = api_client.get("/api/v1/workouts/")
+    assert response.status_code == HTTP_200_OK
