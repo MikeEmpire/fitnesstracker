@@ -26,6 +26,7 @@ class GenerateWorkoutPlanView(APIView):
     @validate_json(WorkoutPreferences)
     def post(self, request, *args, **kwargs):
         preferences: WorkoutPreferences = request.data
+        user = request.user
 
-        plan = generate_workout_plan(preferences)
+        plan = generate_workout_plan(user, preferences)
         return Response({"message": "Workout plan generated", "plan_id": plan.id})
