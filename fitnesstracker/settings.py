@@ -167,6 +167,7 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",  # Optional for web login
         "rest_framework.authentication.TokenAuthentication",
     ),
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
 }
 
 LOGIN_REDIRECT_URL = "/"

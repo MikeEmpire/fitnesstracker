@@ -1,12 +1,20 @@
+import os
+import django
 import factory
 import pytest
-from core.models.workout_models import Workout
+from core.models.workout_models import WorkoutPlan
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 from oauth2_provider.models import AccessToken, Application
 from django.utils.timezone import now
 from datetime import timedelta
 import secrets
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "fitnesstracker.settings")
+django.setup()
+
+
+# Ensure Django settings are loaded before anything else
 
 User = get_user_model()
 
@@ -21,11 +29,13 @@ class UserFactory(factory.django.DjangoModelFactory):
 
 
 # ✅ Workout Factory
-class WorkoutFactory(factory.django.DjangoModelFactory):
+class WorkoutPlanFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = Workout
+        model = WorkoutPlan
 
     name = "Test App"
+    goal = "strength"
+    duration = 5000
 
 
 # ✅ OAuth2 Application Factory
@@ -56,8 +66,8 @@ def test_user(db):
 
 
 @pytest.fixture
-def test_workout(db):
-    return WorkoutFactory()
+def test_workout_plan(db):
+    return WorkoutPlanFactory()
 
 
 # ✅ Database access for all tests
@@ -69,7 +79,6 @@ def db():
 
 # ✅ Create an authenticated API client
 @pytest.fixture
-@pytest.mark.django_db
 def api_client(test_user):
     """Returns an API Client authenticated as test_user"""
     client = APIClient()
@@ -79,7 +88,6 @@ def api_client(test_user):
 
 # ✅ Create an OAuth2 application (for issuing tokens)
 @pytest.fixture
-@pytest.mark.django_db
 def oauth_application(db):
     """Returns an OAuth2 Application for testing"""
     return OAuthApplicationFactory()
@@ -87,7 +95,6 @@ def oauth_application(db):
 
 # ✅ Generate an OAuth2 token for a user
 @pytest.fixture
-@pytest.mark.django_db
 def access_token(test_user, oauth_application):
     """Creates and returns an OAuth2 access token"""
     return OAuthTokenFactory(user=test_user, application=oauth_application)
