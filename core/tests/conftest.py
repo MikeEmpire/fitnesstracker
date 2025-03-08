@@ -23,6 +23,7 @@ User = get_user_model()
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
+        skip_postgeneration_save = True # ✅ Prevents user factory from saving twice
 
     email = factory.Faker("email")
     password = factory.PostGenerationMethodCall("set_password", "securepass")
