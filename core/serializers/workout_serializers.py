@@ -27,7 +27,14 @@ class WorkoutSessionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkoutSession
-        fields = ["id", "name", "day_of_week", "exercises"]
+        fields = [
+            "id",
+            "name",
+            "day_of_week",
+            "deleted_at",
+            "created_at",
+            "updated_at",
+        ]
 
 
 class WorkoutPlanSerializer(serializers.ModelSerializer):

@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.timezone import now
 from core.models.user_models import User
 
 
@@ -39,6 +40,9 @@ class WorkoutSession(models.Model):
             ("sunday", "Sunday"),
         ],
     )
+    created_at = models.DateTimeField(auto_now_add=True, default=now)
+    deleted_at = models.DateTimeField(blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 class Exercise(models.Model):

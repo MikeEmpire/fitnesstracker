@@ -9,6 +9,7 @@ from core.serializers.workout_serializers import (
     WorkoutPlanSerializer,
     WorkoutPreferencesSerializer,
     ExerciseSerializer,
+    WorkoutSessionSerializer,
 )
 
 
@@ -157,5 +158,44 @@ def test_valid_workout_preferences_serializer(test_user):
         "health_conditions": "None",
     }
 
+    assert serializer.data == expected_data
+
+
+@pytest.mark.django_db
+def test_invalid_workout_preferences_serializer():
+    """Ensure that the workout preferences serializer raises errors for improper JSON structure"""
+
+    invalid_data = {"workout_location": "gym"}
+
+    serializer = WorkoutPreferencesSerializer(data=invalid_data)
+    assert serializer.is_valid() is False
+    assert "fitness_goal" in serializer.errors
+
+
+@pytest.mark.django_db
+def test_valid_workout_session_serializer(test_user):
+    """Ensure that the workout session serializer works properly"""
+
+    plan = WorkoutPlan.objects.create(
+        user=test_user, name="Strength Plan", goal="strength", duration=6
+    )
+    workout_session = WorkoutSession.objects.create(
+        workout_plan=plan, name="Tuesday", day_of_week="tuesday"
+    )
+    serializer = WorkoutSessionSerializer(workout_session)
+
+    expected_data = {
+        "id": workout_session.id,
+        "name": "Tuesday",
+        "day_of_week": "tuesday",
+        "created_at": workout_session.created_at.astimezone()
+        .isoformat(timespec="microseconds")
+        .replace("+00:00", "Z"),
+        "updated_at": workout_session.updated_at.astimezone()
+        .isoformat(timespec="microseconds")
+        .replace("+00:00", "Z"),
+        "deleted_at": None,
+    }
+    
     assert serializer.data == expected_data
     
