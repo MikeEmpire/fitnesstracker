@@ -1,7 +1,7 @@
 # 🏋️ Fitness API
 
-![GitHub last commit](https://img.shields.io/github/last-commit/yourusername/fitness-api)
-![GitHub license](https://img.shields.io/github/license/yourusername/fitness-api)
+![GitHub last commit](https://img.shields.io/github/last-commit/MikeEmpire/fitness-api)
+![GitHub license](https://img.shields.io/github/license/MikeEmpire/fitness-api)
 
 **Fitness API** is a RESTful API built with Django, Django REST Framework (DRF), and PostgreSQL to manage workouts, users, and fitness tracking. The API supports **OAuth2 authentication**, **automated AI-generated workout plans**, and **real-time tracking**.
 
@@ -44,7 +44,7 @@
 ### **1️⃣ Clone the repository**
 
 ```bash
-git clone https://github.com/yourusername/fitness-api.git && cd fitness-api
+git clone https://github.com/MikeEmpire/fitness-api.git && cd fitness-api
 ```
 
 ### **2️⃣ Set up a virtual environment**
