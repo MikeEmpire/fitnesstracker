@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.timezone import now
 from core.models.user_models import User
@@ -22,6 +23,17 @@ class WorkoutPlan(models.Model):
     )
     duration = models.IntegerField(default=4)
 
+    def clean(self):
+        """Ensure goal is one of the allowed choices"""
+        valid_choices = dict(self._meta.get_field("goal").choices)
+        if self.goal not in valid_choices:
+            raise ValidationError(f"'{self.goal}' is not a valid goal.")
+
+    def save(self, *args, **kwargs):
+        """Call clean() before saving"""
+        self.clean()
+        super().save(*args, **kwargs)
+
 
 class WorkoutSession(models.Model):
     workout_plan = models.ForeignKey(
@@ -43,6 +55,19 @@ class WorkoutSession(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, default=now)
     deleted_at = models.DateTimeField(blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def clean(self):
+        """Ensure that it is a valid day of the week."""
+        valid_choices = dict(self._meta.get_field("day_of_week").choices)
+        if self.day_of_week not in valid_choices:
+            raise ValidationError(
+                f"'{self.day_of_week}' is not a valid day of the week."
+            )
+
+    def save(self, *args, **kwargs):
+        """Call clean() before saving"""
+        self.clean()
+        super().save(*args, **kwargs)
 
 
 class Exercise(models.Model):

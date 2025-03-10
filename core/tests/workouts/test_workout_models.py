@@ -1,4 +1,5 @@
 import pytest
+from django.core.exceptions import ValidationError
 from core.models.workout_models import WorkoutPlan
 
 
@@ -20,7 +21,7 @@ def test_create_workout_plan(test_user):
 def test_default_duration(test_user):
     """Ensure the default duration is set correctly if not provided"""
     plan = WorkoutPlan.objects.create(
-        user=test_user, name="General Plan", goal="fitness"
+        user=test_user, name="General Plan", goal="strength"
     )
 
     assert plan.duration == 4
@@ -30,7 +31,7 @@ def test_default_duration(test_user):
 def test_delete_workout_plan(test_user):
     """Test to make sure that a WorkoutPlan is deleted"""
     plan = WorkoutPlan.objects.create(
-        user=test_user, name="General Plan", goal="fitness"
+        user=test_user, name="General Plan", goal="strength"
     )
 
     plan.delete()
@@ -42,7 +43,7 @@ def test_delete_workout_plan(test_user):
 def test_update_workout_plan(test_user):
     """Test to make sure that you can edit a workout plan"""
     plan = WorkoutPlan.objects.create(
-        user=test_user, name="General Plan", goal="fitness"
+        user=test_user, name="General Plan", goal="strength"
     )
     plan.name = "Test workout plan"
     plan.save(update_fields=["name"])
@@ -55,3 +56,7 @@ def test_update_workout_plan(test_user):
 @pytest.mark.django_db
 def test_invalid_workout_plan_goal(test_user):
     """Test to make sure that you can't set an invalid goal"""
+    with pytest.raises(ValidationError, match="is not a valid goal"):
+        WorkoutPlan.objects.create(
+            user=test_user, name="Invalid Plan", goal="invalid_goal", duration=6
+        )

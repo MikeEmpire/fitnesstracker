@@ -24,7 +24,7 @@ def test_generate_workout_plan_mocked(api_client, test_user):
     """Test generating a workout plan while mocking OpenAI API"""
 
     valid_data = {
-        "fitness_goal": "muscle_gain",
+        "fitness_goal": "strength",
         "experience_level": "beginner",
         "days_per_week": 4,
         "workout_location": "home",

@@ -46,10 +46,14 @@ def generate_workout_plan(user, preferences: WorkoutPreferences) -> dict:
         model="gpt-4o",
     )
 
-    return save_workout_plan(user, response)
+    return save_workout_plan(
+        user,
+        response,
+        preferences["fitness_goal"],
+    )
 
 
-def save_workout_plan(user, openai_response):
+def save_workout_plan(user, openai_response, fitness_goal):
     """
     Parses OpenAI's generated workout plan and saves it to the database.
 
@@ -70,7 +74,7 @@ def save_workout_plan(user, openai_response):
         workout_plan = WorkoutPlan.objects.create(
             user=user,
             name="AI Generated Plan",
-            goal=goal,
+            goal=fitness_goal,
             created_at=now(),
             updated_at=now(),
             deleted_at=None,
