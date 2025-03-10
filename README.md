@@ -1,7 +1,7 @@
 # 🏋️ Fitness API
 
-![GitHub last commit](https://img.shields.io/github/last-commit/MikeEmpire/fitness-api)
-![GitHub license](https://img.shields.io/github/license/MikeEmpire/fitness-api)
+![GitHub last commit](https://img.shields.io/github/last-commit/MikeEmpire/fitnesstracker)
+![GitHub license](https://img.shields.io/github/license/MikeEmpire/fitnesstracker)
 
 **Fitness API** is a RESTful API built with Django, Django REST Framework (DRF), and PostgreSQL to manage workouts, users, and fitness tracking. The API supports **OAuth2 authentication**, **automated AI-generated workout plans**, and **real-time tracking**.
 
@@ -44,7 +44,7 @@
 ### **1️⃣ Clone the repository**
 
 ```bash
-git clone https://github.com/MikeEmpire/fitness-api.git && cd fitness-api
+git clone https://github.com/MikeEmpire/fitnesstracker.git && cd fitnesstracker
 ```
 
 ### **2️⃣ Set up a virtual environment**
@@ -111,15 +111,15 @@ This project is **production-ready** and built for **DigitalOcean, Gunicorn, and
 ### **1️⃣ Docker Setup (Optional)**
 
 ```bash
-docker build -t fitness-api .
-docker run -p 8000:8000 fitness-api
+docker build -t fitnesstracker .
+docker run -p 8000:8000 fitnesstracker
 ```
 
 ### **2️⃣ Deploy to DigitalOcean**
 
 ```bash
 ssh root@your-server-ip
-cd /opt/fitness-api
+cd /opt/fitnesstracker
 git pull origin main
 sudo systemctl restart gunicorn
 ```
