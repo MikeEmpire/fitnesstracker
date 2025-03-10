@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "oauth2_provider",  # OAuth2 Toolkit
+    "drf_yasg",
 ]
 
 

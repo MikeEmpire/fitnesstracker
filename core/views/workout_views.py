@@ -3,6 +3,7 @@ from core.models.workout_models import WorkoutPlan
 from core.serializers.workout_serializers import WorkoutPlanSerializer
 from core.services.workout_services import generate_workout_plan
 from core.types import WorkoutPreferences
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -14,11 +15,18 @@ class WorkoutPlanView(APIView):
     authentication_classes = [TokenAuthentication, SessionAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_description="Retrieve a list of all workout plans.",
+        responses={200: WorkoutPlanSerializer(many=True)},
+    )
     def get(self, request, *args, **kwargs):
         plans = WorkoutPlan.objects.all()
         serializer = WorkoutPlanSerializer(plans, many=True)
         return Response({"data": serializer.data}, status=HTTP_200_OK)
 
+    @swagger_auto_schema(
+        operation_description="Delete a workout plan.",
+    )
     def delete(self, request, *args, **kwargs):
         plan_id = kwargs.get("plan_id")
         plan = WorkoutPlan.objects.filter(id=plan_id).first()
