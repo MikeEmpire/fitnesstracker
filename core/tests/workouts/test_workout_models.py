@@ -1,14 +1,25 @@
-from django.test import TestCase
+import pytest
 from core.models.workout_models import WorkoutPlan
-from core.models.user_models import User
 
 
-class WorkoutPlanModelTest(TestCase):
-    def setUp(self):
-        self.user = User.objects.create(username="testuser")
+@pytest.mark.django_db
+def test_create_workout_plan(test_user):
+    """Ensure a WorkoutPlan is created successfully"""
+    plan = WorkoutPlan.objects.create(
+        user=test_user, name="Strength Plan", goal="strength", duration=6
+    )
 
-    def test_create_workout_plan(self):
-        plan = WorkoutPlan.objects.create(
-            user=self.user, name="Beginner Plan", goal="strength", duration=8
-        )
-        self.assertEqual(plan.name, "Beginner Plan")
+    assert plan.id is not None
+    assert plan.name == "Strength Plan"
+    assert plan.goal == "strength"
+    assert plan.duration == 6
+
+
+@pytest.mark.django_db
+def test_default_duration(test_user):
+    """Ensure the default duration is set correctly if not provided"""
+    plan = WorkoutPlan.objects.create(
+        user=test_user, name="General Plan", goal="fitness"
+    )
+
+    assert plan.duration == 4

@@ -8,7 +8,7 @@ class WorkoutPlan(models.Model):
     )
     name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
-    deleted_at = models.DateTimeField(auto_now_add=True)
+    deleted_at = models.DateTimeField(blank=True, null=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     goal = models.CharField(
         max_length=100,
@@ -70,7 +70,9 @@ class Exercise(models.Model):
 
 class WorkoutPreferences(models.Model):
     user = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name="preferences"
+        User,
+        on_delete=models.CASCADE,
+        related_name="preferences",
     )
     workout_location = models.CharField(
         max_length=10, choices=[("gym", "Gym"), ("home", "Home")]
