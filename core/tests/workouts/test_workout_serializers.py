@@ -38,7 +38,7 @@ def test_serialized_output_with_sessions(test_user):
             {
                 "day_of_week": "monday",
                 "exercises": [],
-                "id": 1,
+                "id": session1.id,
                 "name": "Monday",
                 "created_at": session1.created_at.astimezone()
                 .isoformat(timespec="microseconds")
@@ -51,7 +51,7 @@ def test_serialized_output_with_sessions(test_user):
             {
                 "day_of_week": "tuesday",
                 "exercises": [],
-                "id": 2,
+                "id": session2.id,
                 "name": "Tuesday",
                 "created_at": session2.created_at.astimezone()
                 .isoformat(timespec="microseconds")
