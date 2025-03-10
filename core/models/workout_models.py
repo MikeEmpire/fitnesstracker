@@ -52,9 +52,9 @@ class WorkoutSession(models.Model):
             ("sunday", "Sunday"),
         ],
     )
-    created_at = models.DateTimeField(auto_now_add=True, default=now)
+    created_at = models.DateTimeField(auto_now_add=True)
     deleted_at = models.DateTimeField(blank=True, null=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
 
     def clean(self):
         """Ensure that it is a valid day of the week."""

@@ -59,6 +59,7 @@ eggs/
 lib/
 lib64/
 parts/
+bin/deploy.sh
 sdist/
 var/
 wheels/
