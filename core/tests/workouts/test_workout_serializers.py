@@ -21,10 +21,10 @@ def test_serialized_output_with_sessions(test_user):
         user=test_user, name="Strength Plan", goal="strength", duration=6
     )
 
-    WorkoutSession.objects.create(
+    session1 = WorkoutSession.objects.create(
         workout_plan=plan, name="Monday", day_of_week="monday"
     )
-    WorkoutSession.objects.create(
+    session2 = WorkoutSession.objects.create(
         workout_plan=plan, name="Tuesday", day_of_week="tuesday"
     )
 
@@ -35,8 +35,32 @@ def test_serialized_output_with_sessions(test_user):
         "name": "Strength Plan",
         "goal": "strength",
         "workout_sessions": [
-            {"day_of_week": "monday", "exercises": [], "id": 1, "name": "Monday"},
-            {"day_of_week": "tuesday", "exercises": [], "id": 2, "name": "Tuesday"},
+            {
+                "day_of_week": "monday",
+                "exercises": [],
+                "id": 1,
+                "name": "Monday",
+                "created_at": session1.created_at.astimezone()
+                .isoformat(timespec="microseconds")
+                .replace("+00:00", "Z"),
+                "updated_at": session1.updated_at.astimezone()
+                .isoformat(timespec="microseconds")
+                .replace("+00:00", "Z"),
+                "deleted_at": None,
+            },
+            {
+                "day_of_week": "tuesday",
+                "exercises": [],
+                "id": 2,
+                "name": "Tuesday",
+                "created_at": session2.created_at.astimezone()
+                .isoformat(timespec="microseconds")
+                .replace("+00:00", "Z"),
+                "updated_at": session2.updated_at.astimezone()
+                .isoformat(timespec="microseconds")
+                .replace("+00:00", "Z"),
+                "deleted_at": None,
+            },
         ],
         "created_at": plan.created_at.astimezone()
         .isoformat(timespec="microseconds")
@@ -52,7 +76,7 @@ def test_serialized_output_with_sessions(test_user):
 
 
 @pytest.mark.django_db
-def test_serialized_output_without_sessions(test_user):
+def test_workout_plan_serialized_output_without_sessions(test_user):
     """Ensure that a workout plan without sessions serializes correctly"""
 
     plan = WorkoutPlan.objects.create(
@@ -188,6 +212,7 @@ def test_valid_workout_session_serializer(test_user):
         "id": workout_session.id,
         "name": "Tuesday",
         "day_of_week": "tuesday",
+        "exercises": [],
         "created_at": workout_session.created_at.astimezone()
         .isoformat(timespec="microseconds")
         .replace("+00:00", "Z"),
@@ -196,6 +221,5 @@ def test_valid_workout_session_serializer(test_user):
         .replace("+00:00", "Z"),
         "deleted_at": None,
     }
-    
+
     assert serializer.data == expected_data
-    

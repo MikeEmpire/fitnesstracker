@@ -29,6 +29,7 @@ class WorkoutSessionSerializer(serializers.ModelSerializer):
         model = WorkoutSession
         fields = [
             "id",
+            "exercises",
             "name",
             "day_of_week",
             "deleted_at",
