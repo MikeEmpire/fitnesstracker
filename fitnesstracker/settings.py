@@ -39,7 +39,16 @@ SOCIAL_AUTH_GOOGLE_SECRET = env("GOOGLE_CLIENT_SECRET")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+# Set ALLOWED_HOSTS from environment variable file
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
+
+CSRF_TRUSTED_ORIGINS = [f"https://{host}" for host in ALLOWED_HOSTS]
+
+# Ensure Django recognizes it's behind a proxy
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# Disable SECURE_SSL_REDIRECT (Nginx handles this)
+SECURE_SSL_REDIRECT = False
 
 
 # Application definition
@@ -110,6 +119,24 @@ DATABASES = {
         "HOST": env("DB_HOST"),
         "PORT": env("DB_PORT"),
     }
+}
+
+SWAGGER_SETTINGS = {
+    "USE_SESSION_AUTH": False,  # Set to True if using Django login for auth
+    "SECURITY_DEFINITIONS": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+        }
+    },
+    "JSON_EDITOR": True,
+    "DOC_EXPANSION": "none",  # 'none', 'list', 'full'
+    "SHOW_REQUEST_HEADERS": True,
+    "OPERATIONS_SORTER": "alpha",
+    "DEFAULT_MODEL_RENDERING": "example",
+    "DEFAULT_INFO": "api_info",
+    "BASE_PATH": "/",
 }
 
 
