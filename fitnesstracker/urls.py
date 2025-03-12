@@ -25,12 +25,19 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path(f"api/v{DJANGO_API_VERSION}/", include("core.urls")),
     # 📌 Swagger documentation
-    path("api/docs/", schema_view.with_ui("swagger", cache_timeout=0), name="api-docs"),
-    path("api/redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="redoc"),
-    # 📌 JSON & YAML schema URLs (for programmatic API access)
     re_path(
-        r"^swagger(?P<format>\.json|\.yaml)$",
+        r"^api/docs/$",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
+    re_path(
+        r"^api/redoc/$",
+        schema_view.with_ui("redoc", cache_timeout=0),
+        name="schema-redoc",
+    ),
+    re_path(
+        r"^api/swagger.json$",
         schema_view.without_ui(cache_timeout=0),
         name="schema-json",
-    )
+    ),
 ]
