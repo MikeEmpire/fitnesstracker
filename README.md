@@ -5,6 +5,9 @@
 
 **Fitness API** is a RESTful API built with Django, Django REST Framework (DRF), and PostgreSQL to manage workouts, users, and fitness tracking. The API supports **OAuth2 authentication**, **automated AI-generated workout plans**, and **real-time tracking**.
 
+## Production URL
+
+[https://fitness-api.afam.app](https://fitness-api.afam.app)
 ---
 
 ## 🚀 Features
