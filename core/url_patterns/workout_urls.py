@@ -1,5 +1,9 @@
 from django.urls import path
-from core.views.workout_views import GenerateWorkoutPlanView, WorkoutPlanView
+from core.views.workout_views import (
+    WorkoutPreferencesView,
+    GenerateWorkoutPlanView,
+    WorkoutPlanView,
+)
 
 
 urlpatterns = [
@@ -9,4 +13,5 @@ urlpatterns = [
         GenerateWorkoutPlanView.as_view(),
         name="Generate Workout Plans",
     ),
+    path("preferences/", WorkoutPreferencesView.as_view(), name="Workout preferences"),
 ]

@@ -21,6 +21,10 @@ class WorkoutPlan(models.Model):
         ],
     )
     duration = models.IntegerField(default=4)
+    is_public = models.BooleanField(
+        default=False, help_text="Whether this workout plan is public or not"
+    )
+    likes = models.ManyToManyField(User, related_name="liked_plans", blank=True)
 
     def clean(self):
         """Ensure goal is one of the allowed choices"""
@@ -32,6 +36,9 @@ class WorkoutPlan(models.Model):
         """Call clean() before saving"""
         self.clean()
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.name} - {self.user.username}"
 
 
 class WorkoutSession(models.Model):
@@ -76,7 +83,21 @@ class Exercise(models.Model):
     name = models.CharField(max_length=255)
     sets = models.PositiveIntegerField(default=2)
     reps = models.PositiveIntegerField(default=10)
+    equipment_needed = models.CharField(max_length=255, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    instruction = models.TextField(
+        blank=True, null=True, help_text="How to perform the exercise properly"
+    )
     rest_time = models.PositiveIntegerField(default=60)  # in seconds
+    difficulty = models.CharField(
+        max_length=20,
+        choices=[
+            ("beginner", "Beginner"),
+            ("intermediate", "Intermediate"),
+            ("advanced", "Advanced"),
+        ],
+        default="intermediate",
+    )
     equipment_needed = models.CharField(max_length=255, blank=True, null=True)
     muscle_group = models.CharField(
         max_length=100,
@@ -88,6 +109,8 @@ class Exercise(models.Model):
             ("shoulders", "Shoulders"),
             ("abs", "Abs"),
             ("core", "Core"),
+            ("glutes", "Glutes"),
+            ("cardio", "Cardiovascular"),
             ("other", "Other"),
             ("none", "None"),
             ("full_body", "Full Body"),
@@ -127,6 +150,17 @@ class WorkoutPreferences(models.Model):
     )
     days_per_week = models.IntegerField(default=3)
     health_conditions = models.TextField(blank=True, null=True)
+    injuries = models.TextField(blank=True, null=True)
+    focus_areas = models.JSONField(
+        default=list, help_text="Specific body areas to focus"
+    )
+    excluded_exercises = models.JSONField(default=list, help_text="Exercises to avoid")
+    height = models.FloatField(
+        default=0, help_text="Height in cm", blank=True, null=True
+    )
+    weight = models.FloatField(
+        default=0, help_text="Weight in kg", blank=True, null=True
+    )
 
     def __str__(self):
         return f"{self.user.username}'s Preferences"

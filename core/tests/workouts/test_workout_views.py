@@ -64,3 +64,27 @@ def test_workout_plan_list(api_client):
     """Test that a user is able to get a list of workout plans"""
     response = api_client.get("/api/v1/workouts/")
     assert response.status_code == HTTP_200_OK
+
+
+@pytest.mark.django_db
+def test_save_workout_preferences(api_client, test_user):
+    """Test that a user can save a workout preference"""
+    valid_data = {
+        "user": test_user.id,
+        "fitness_goal": "weight_loss",
+        "days_per_week": 4,
+        "workout_location": "gym",
+        "available_equipment": ["dumbbells", "resistance bands"],
+        "experience_level": "beginner",
+        "health_conditions": "None",
+        "excluded_exercises": [],
+        "focus_areas": [],
+        "height": 180,
+        "weight": 80,
+    }
+
+    response = api_client.post(
+        "/api/v1/workouts/preferences/", valid_data, format="json"
+    )
+
+    assert response.status_code == HTTP_201_CREATED

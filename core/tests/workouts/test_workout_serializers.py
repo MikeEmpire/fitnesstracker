@@ -168,6 +168,10 @@ def test_valid_workout_preferences_serializer(test_user):
         experience_level="beginner",
         days_per_week=4,
         health_conditions="None",
+        focus_areas=[],
+        height=15,
+        injuries=[],
+        excluded_exercises=[],
     )
 
     serializer = WorkoutPreferencesSerializer(preferences)
@@ -180,6 +184,11 @@ def test_valid_workout_preferences_serializer(test_user):
         "experience_level": "beginner",
         "days_per_week": 4,
         "health_conditions": "None",
+        "excluded_exercises": [],
+        "focus_areas": [],
+        "height": 15.0,
+        "injuries": "[]",
+        "weight": 0.0,
     }
 
     assert serializer.data == expected_data

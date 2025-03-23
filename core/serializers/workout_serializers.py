@@ -61,10 +61,16 @@ class WorkoutPreferencesSerializer(serializers.ModelSerializer):
         model = WorkoutPreferences
         fields = [
             "id",
+            "user",
             "fitness_goal",
             "available_equipment",
             "experience_level",
             "days_per_week",
             "health_conditions",
             "workout_location",
+            "injuries",
+            "focus_areas",
+            "excluded_exercises",
+            "height",
+            "weight",
         ]
